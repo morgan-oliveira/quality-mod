@@ -6,6 +6,7 @@ using Terraria.ModLoader.IO;
 
 public class GlobalQuality : GlobalItem {
     public int quality;
+    public bool isIdentified;
     public override bool InstancePerEntity => true;
     protected override bool CloneNewInstances => true;
 
@@ -22,8 +23,12 @@ public class GlobalQuality : GlobalItem {
     public override void ModifyTooltips(Item item, List<TooltipLine> tooltips)
     {
         if (item.damage > 0 || item.defense > 0) {
-            tooltips.Add(new TooltipLine(Mod, "quality", $"Quality: {quality}%") { OverrideColor = Color.BlueViolet });
+            if ((item.GetGlobalItem<GlobalQuality>().quality == 0) & (item.GetGlobalItem<GlobalTier>().itemTier == "D")) {
+                tooltips.Add(new TooltipLine(Mod, "unidentified", "Unidentified Item") { OverrideColor = Color.Gray});
+                isIdentified = false;
+            } else tooltips.Add(new TooltipLine(Mod, "quality", $"Quality: {quality}%") { OverrideColor = Color.BlueViolet });
         }
+        
     }
 
     public override void SaveData(Item item, TagCompound tag)

@@ -10,7 +10,7 @@ public class GlobalTier : GlobalItem {
     public override bool InstancePerEntity => true;
     protected override bool CloneNewInstances => true;
     public List<String> tiers = new List<String>() {"D", "C", "B", "A", "S", "SS", "SSS"};
-    String itemTier;
+    public String itemTier;
     int tierKey;
     
     public override void SetDefaults(Item item)
@@ -25,6 +25,9 @@ public class GlobalTier : GlobalItem {
     {
         if ((item.damage > 0) || (item.defense > 0)) {
                 itemTier = tiers[tierKey];
+                if ((item.GetGlobalItem<GlobalTier>().itemTier == "D") & (item.GetGlobalItem<GlobalQuality>().quality == 0)) {
+                    tooltips.Add(new TooltipLine(Mod, "scroll", "Use a Scroll of Identification to identify this item") {OverrideColor = Color.Gray});
+                } else
                 tooltips.Add(new TooltipLine(Mod, "itemTier", $"Tier: {itemTier}") {OverrideColor = Color.Gold});
         }
     }
@@ -32,6 +35,12 @@ public class GlobalTier : GlobalItem {
     public override void SaveData(Item item, TagCompound tag)
     {
         tag["tierKey"] = tierKey;
+    }
+
+    public static bool IsTierD(Item item) {
+        if (item.GetGlobalItem<GlobalTier>().itemTier == "D") {
+            return true;
+        } else return false;
     }
 
     public override void LoadData(Item item, TagCompound tag)
