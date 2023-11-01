@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Terraria.DataStructures;
 using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.ModLoader;
@@ -17,16 +18,22 @@ public class GlobalTier : GlobalItem {
     {
         item.GetGlobalItem<GlobalTier>().itemTier = itemTier;
     }
+    public override void OnSpawn(Item item, IEntitySource source)
+    {
+        tierKey = Main.rand.Next(0, tiers.Count);
+    }
     public override void OnCreate(Item item, ItemCreationContext context)
     {
-            tierKey = Main.rand.Next(0, tiers.Count);
+        tierKey = Main.rand.Next(0, tiers.Count);
     }
+
+
     public override void ModifyTooltips(Item item, List<TooltipLine> tooltips)
     {
         if ((item.damage > 0) || (item.defense > 0)) {
                 itemTier = tiers[tierKey];
                 if ((item.GetGlobalItem<GlobalTier>().itemTier == "D") & (item.GetGlobalItem<GlobalQuality>().quality == 0)) {
-                    tooltips.Add(new TooltipLine(Mod, "scroll", "Use a Scroll of Identification to identify this item") {OverrideColor = Color.Gray});
+                    tooltips.Add(new TooltipLine(Mod, "scroll", "Unidentified Item") {OverrideColor = Color.Gray});
                 } else
                 tooltips.Add(new TooltipLine(Mod, "itemTier", $"Tier: {itemTier}") {OverrideColor = Color.Gold});
         }
