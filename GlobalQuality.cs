@@ -16,7 +16,9 @@ public class GlobalQuality : GlobalItem {
     }
     public override void SetDefaults(Item item)
     {
-        item.GetGlobalItem<GlobalQuality>().quality = quality;
+        if (item.damage > 0 || item.defense > 0) {
+            item.GetGlobalItem<GlobalQuality>().quality = quality;
+        }
     }
 
 
@@ -32,6 +34,26 @@ public class GlobalQuality : GlobalItem {
             tooltips.Add(new TooltipLine(Mod, "quality", $"Quality: {quality}%") { OverrideColor = Color.BlueViolet });
         }
         
+    }
+    // Cannot use item if broken
+    public override bool CanUseItem(Item item, Player player)
+    {
+        if (item.damage > 0 || item.defense > 0) {
+            if (SetBrokenItem(item)) {
+                return false;
+            } 
+        } else return true;
+        return true;
+    }
+    // Cannot equit accessory if broken
+    public override bool CanEquipAccessory(Item item, Player player, int slot, bool modded)
+    {
+        if (item.damage > 0 || item.defense > 0) {
+            if (SetBrokenItem(item)) {
+                return false;
+            } 
+        } else return true;
+        return true;
     }
     public override void OnSpawn(Item item, IEntitySource source)
     {
