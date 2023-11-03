@@ -29,11 +29,11 @@ public class GlobalQuality : GlobalItem {
     {
         ArmorPenalty(item);
         // Only add tooltip "Broken" if item is broken
+        if (IsArmorBroken) {
+            tooltips.Add(new TooltipLine(Mod, "Defense", $"{item.defense} defense") { OverrideColor = Color.Gray });
+        }   
         if (IsBrokenItem(item)) {
-            tooltips.Add(new TooltipLine(Mod, "broken", "Broken") { OverrideColor = Color.Gray });   
-                if (IsArmorBroken) {
-                    tooltips.Add(new TooltipLine(Mod, "Defense", $"{item.defense} defense") { OverrideColor = Color.Gray });
-                }            
+            tooltips.Add(new TooltipLine(Mod, "broken", "Broken") { OverrideColor = Color.Gray });              
         } else  
         // Only add quality% tooltip if quality >= 40
         if (item.damage > 0 || item.defense > 0) {
@@ -61,7 +61,7 @@ public class GlobalQuality : GlobalItem {
         return true;
     }
     public void ArmorPenalty(Item item) {
-        if (item.bodySlot != -1 || item.bodySlot != 0 || item.bodySlot != -2) {
+        if (item.bodySlot != -1 || item.bodySlot != 0 || item.bodySlot != -2 || item.accessory) {
             if (IsBrokenItem(item)) {
                 item.defense = 0;
                 IsArmorBroken = true;
