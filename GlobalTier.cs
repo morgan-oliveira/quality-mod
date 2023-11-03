@@ -13,7 +13,6 @@ public class GlobalTier : GlobalItem {
     public List<String> tiers = new List<String>() {"D", "C", "B", "A", "S", "SS", "SSS"};
     public String itemTier;
     int tierKey;
-    public static bool NoQuality;
     
     public override void SetDefaults(Item item)
     {
@@ -33,7 +32,7 @@ public class GlobalTier : GlobalItem {
     {
         if ((item.damage > 0) || (item.defense > 0)) {
                 itemTier = tiers[tierKey];
-                if (!GlobalQuality.SetBrokenItem(item)) {
+                if (!GlobalQuality.IsBrokenItem(item)) {
                     tooltips.Add(new TooltipLine(Mod, "itemTier", $"Tier: {itemTier}") {OverrideColor = Color.Gold});
                 }
         }
